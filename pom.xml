@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mugiwara</groupId>
-	<artifactId>finfindnomi</artifactId>
+	<artifactId>findfindnomi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>finfindnomi</name>
+	<name>findfindnomi</name>
 	<description>Find Find no mi api</description>
 	<properties>
 		<java.version>17</java.version>

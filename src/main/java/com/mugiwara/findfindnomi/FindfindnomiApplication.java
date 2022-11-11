@@ -1,13 +1,13 @@
-package com.mugiwara.finfindnomi;
+package com.mugiwara.findfindnomi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FinfindnomiApplication {
+public class FindfindnomiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FinfindnomiApplication.class, args);
+		SpringApplication.run(FindfindnomiApplication.class, args);
 	}
 
 }
