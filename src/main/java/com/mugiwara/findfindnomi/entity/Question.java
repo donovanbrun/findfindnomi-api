@@ -1,27 +1,29 @@
 package com.mugiwara.findfindnomi.entity;
 
+import com.mugiwara.findfindnomi.dao.AnswerDAO;
+import com.mugiwara.findfindnomi.dao.QuestionDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.UUID;
-
-@Entity
-@Table(name = "Question")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Question {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+    private Long id;
     private String question;
     private int level;
+    private String answer;
+
+    public Question(QuestionDAO questionDAO, AnswerDAO answerDAO) {
+        if (questionDAO != null) {
+            this.id = questionDAO.getId();
+            this.question = questionDAO.getQuestion();
+        }
+        if (answerDAO != null) {
+            this.level = answerDAO.getLevel();
+            this.answer = answerDAO.getAnswer();
+        }
+    }
 }
