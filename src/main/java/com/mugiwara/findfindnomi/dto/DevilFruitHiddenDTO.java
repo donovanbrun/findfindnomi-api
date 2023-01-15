@@ -1,7 +1,7 @@
-package com.mugiwara.findfindnomi.entity;
+package com.mugiwara.findfindnomi.dto;
 
-import com.mugiwara.findfindnomi.dao.CharacterDAO;
-import com.mugiwara.findfindnomi.dao.DevilFruitDAO;
+import com.mugiwara.findfindnomi.entity.Character;
+import com.mugiwara.findfindnomi.entity.DevilFruit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-public class DevilFruitHidden {
+public class DevilFruitHiddenDTO {
 
     private Long id;
     private String name;
@@ -17,7 +17,7 @@ public class DevilFruitHidden {
     private Long characterId;
     //private List<QuestionDAO> questions;
 
-    public DevilFruitHidden(DevilFruitDAO devilFruitDAO, CharacterDAO characterDAO) {
+    public DevilFruitHiddenDTO(DevilFruit devilFruitDAO, Character characterDAO) {
         if (devilFruitDAO != null) {
             this.id = devilFruitDAO.getId();
             this.name = devilFruitDAO.getName();

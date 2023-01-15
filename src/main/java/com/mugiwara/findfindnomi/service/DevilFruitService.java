@@ -1,12 +1,14 @@
 package com.mugiwara.findfindnomi.service;
 
-import com.mugiwara.findfindnomi.dao.*;
 import com.mugiwara.findfindnomi.entity.*;
+import com.mugiwara.findfindnomi.entity.Answer;
 import com.mugiwara.findfindnomi.entity.Character;
-import com.mugiwara.findfindnomi.entity.ingestion.AnswerIngestion;
-import com.mugiwara.findfindnomi.entity.ingestion.CharacterIngestion;
-import com.mugiwara.findfindnomi.entity.ingestion.DevilFruitIngestion;
-import com.mugiwara.findfindnomi.entity.ingestion.IngestionModel;
+import com.mugiwara.findfindnomi.entity.Question;
+import com.mugiwara.findfindnomi.dto.*;
+import com.mugiwara.findfindnomi.dto.ingestion.AnswerIngestion;
+import com.mugiwara.findfindnomi.dto.ingestion.CharacterIngestion;
+import com.mugiwara.findfindnomi.dto.ingestion.DevilFruitIngestion;
+import com.mugiwara.findfindnomi.dto.ingestion.IngestionModel;
 import com.mugiwara.findfindnomi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,36 +36,36 @@ public class DevilFruitService {
         this.belongRepository = belongRepository;
     }
 
-    public DevilFruitFull get(Long id) {
+    public DevilFruitFullDTO get(Long id) {
 
-        DevilFruitDAO d = this.devilFruitRepository.findById(id).get();
+        DevilFruit d = this.devilFruitRepository.findById(id).get();
 
-        ArrayList<Character> characters = new ArrayList<>();
+        ArrayList<CharacterDTO> characters = new ArrayList<>();
 
-        for (CharacterDAO c : this.characterRepository.getAllByDevilFruitId(d)) {
-            List<QuestionDAO> questionDAOList = questionRepository.getAllByDevilFruitAndCharacter(d,c);
-            ArrayList<Question> questions = new ArrayList<>();
-            for (QuestionDAO q : questionDAOList) {
-                AnswerDAO a = this.answerRepository.findByDevilFruitAndCharacterAndQuestion(d,c,q);
-                if (a != null) questions.add(new Question(q,a));
+        for (Character c : this.characterRepository.getAllByDevilFruitId(d)) {
+            List<Question> questionDAOList = questionRepository.getAllByDevilFruitAndCharacter(d,c);
+            ArrayList<QuestionDTO> questions = new ArrayList<>();
+            for (Question q : questionDAOList) {
+                Answer a = this.answerRepository.findByDevilFruitAndCharacterAndQuestion(d,c,q);
+                if (a != null) questions.add(new QuestionDTO(q,a));
             }
-            characters.add(new Character(c,questions));
+            characters.add(new CharacterDTO(c,questions));
         }
 
-        return new DevilFruitFull(d, characters);
+        return new DevilFruitFullDTO(d, characters);
     }
 
-    public DevilFruitHidden getRandom() {
+    public DevilFruitHiddenDTO getRandom() {
         int nb = (int) this.devilFruitRepository.count();
         int rnd = (int) (Math.random() * nb);
         if (nb > 0) {
-            DevilFruitDAO devilFruit = this.devilFruitRepository.findAll().get(rnd);
-            List<CharacterDAO> characters = this.characterRepository.getAllByDevilFruitId(devilFruit);
+            DevilFruit devilFruit = this.devilFruitRepository.findAll().get(rnd);
+            List<Character> characters = this.characterRepository.getAllByDevilFruitId(devilFruit);
             if (!characters.isEmpty()) {
                 rnd = (int) (Math.random() * (characters.size()));
-                return new DevilFruitHidden(devilFruit, characters.get(rnd));
+                return new DevilFruitHiddenDTO(devilFruit, characters.get(rnd));
             }
-            return new DevilFruitHidden(devilFruit, null);
+            return new DevilFruitHiddenDTO(devilFruit, null);
 
         }
         return null;
@@ -74,21 +76,21 @@ public class DevilFruitService {
         // Transform ingestionModel to DAO
         // ADD SOME VERIFICATIONS
         String[] questionsIngestion = ingestionModel.getQuestions();
-        QuestionDAO[] questions = new QuestionDAO[questionsIngestion.length];
+        Question[] questions = new Question[questionsIngestion.length];
 
         for (int i = 0; i < questionsIngestion.length; i++) {
-            questions[i] = new QuestionDAO(generateRandom(), questionsIngestion[i]);
+            questions[i] = new Question(generateRandom(), questionsIngestion[i]);
         }
 
         List<DevilFruitIngestion> devilFruitIngestionList = ingestionModel.getDevilFruits();
 
-        ArrayList<DevilFruitDAO> devilFruits = new ArrayList<>(devilFruitIngestionList.size());
-        ArrayList<CharacterDAO> characters = new ArrayList<>();
-        ArrayList<BelongDAO> belongs = new ArrayList<>();
-        ArrayList<AnswerDAO> answers = new ArrayList<>();
+        ArrayList<DevilFruit> devilFruits = new ArrayList<>(devilFruitIngestionList.size());
+        ArrayList<Character> characters = new ArrayList<>();
+        ArrayList<Belong> belongs = new ArrayList<>();
+        ArrayList<Answer> answers = new ArrayList<>();
 
         for (DevilFruitIngestion devilFruitIngestion : devilFruitIngestionList) {
-            DevilFruitDAO devilFruitDAO = new DevilFruitDAO(
+            DevilFruit devilFruitDAO = new DevilFruit(
                     generateRandom(),
                     devilFruitIngestion.getName(),
                     Type.valueOf(devilFruitIngestion.getType()),
@@ -100,31 +102,31 @@ public class DevilFruitService {
             List<CharacterIngestion> characterIngestionList = devilFruitIngestion.getCharacters();
 
             for (CharacterIngestion characterIngestion : characterIngestionList) {
-                Optional<CharacterDAO> optCharacterDAO = characters.stream()
+                Optional<Character> optCharacterDAO = characters.stream()
                         .filter(c -> (c.getName().equals(characterIngestion.getName())))
                         .findFirst();
 
-                CharacterDAO characterDAO = null;
+                Character characterDAO = null;
 
                 if (optCharacterDAO.isPresent()) {
                     characterDAO = optCharacterDAO.get();
-                    BelongDAO belongDAO = new BelongDAO(generateRandom(), devilFruitDAO, characterDAO);
+                    Belong belongDAO = new Belong(generateRandom(), devilFruitDAO, characterDAO);
                 }
                 else {
-                    characterDAO = new CharacterDAO(
+                    characterDAO = new Character(
                             generateRandom(),
                             characterIngestion.getName(),
                             characterIngestion.getImage());
                 }
 
-                BelongDAO belongDAO = new BelongDAO(generateRandom(), devilFruitDAO, characterDAO);
+                Belong belongDAO = new Belong(generateRandom(), devilFruitDAO, characterDAO);
 
                 characters.add(characterDAO);
                 belongs.add(belongDAO);
 
                 for (int i = 0; i < characterIngestion.getAnswers().length; i++) {
                     AnswerIngestion answerIngestion = characterIngestion.getAnswers()[i];
-                    AnswerDAO answerDAO = new AnswerDAO(generateRandom(),
+                    Answer answerDAO = new Answer(generateRandom(),
                             devilFruitDAO,
                             characterDAO,
                             questions[i],
@@ -156,12 +158,12 @@ public class DevilFruitService {
         return (long) (Math.random() * Long.MAX_VALUE);
     }
 
-    public GuessResult guess(Long idDevilFruit, String proposition) {
-        List<CharacterDAO> characterDAOList = characterRepository.getAllByDevilFruitId(devilFruitRepository.getReferenceById(idDevilFruit));
+    public GuessResultDTO guess(Long idDevilFruit, String proposition) {
+        List<Character> characterDAOList = characterRepository.getAllByDevilFruitId(devilFruitRepository.getReferenceById(idDevilFruit));
 
-        GuessResult result = new GuessResult(idDevilFruit, proposition, false, null);
+        GuessResultDTO result = new GuessResultDTO(idDevilFruit, proposition, false, null);
 
-        for (CharacterDAO c : characterDAOList) {
+        for (Character c : characterDAOList) {
             if (c.getName().trim().equalsIgnoreCase(proposition.trim())){
                 result.setResult(true);
                 result.setCharacter(c);
@@ -171,15 +173,15 @@ public class DevilFruitService {
         return result;
     }
 
-    public Answer getAnswer(Long idDevilFruit, Long idCharacter, Long idQuestion) {
+    public AnswerDTO getAnswer(Long idDevilFruit, Long idCharacter, Long idQuestion) {
 
-        AnswerDAO answerDAO = answerRepository.findByDevilFruitAndCharacterAndQuestion(
+        Answer answerDAO = answerRepository.findByDevilFruitAndCharacterAndQuestion(
                 devilFruitRepository.getReferenceById(idDevilFruit),
                 characterRepository.getReferenceById(idCharacter),
                 questionRepository.getReferenceById(idQuestion)
         );
 
-        return new Answer(answerDAO.getDevilFruit().getId(),
+        return new AnswerDTO(answerDAO.getDevilFruit().getId(),
                 answerDAO.getCharacter().getId(),
                 answerDAO.getQuestion().getId(),
                 answerDAO.getQuestion().getQuestion(),

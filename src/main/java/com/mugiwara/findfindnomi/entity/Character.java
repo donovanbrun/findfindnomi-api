@@ -1,28 +1,24 @@
 package com.mugiwara.findfindnomi.entity;
 
-import com.mugiwara.findfindnomi.dao.CharacterDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name = "Character")
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class Character {
 
+    @Id
     private Long id;
     private String name;
     private String image;
-    private List<Question> questions;
-
-    public Character(CharacterDAO characterDAO, List<Question> questions) {
-        if (characterDAO != null) {
-            this.id = characterDAO.getId();
-            this.name = characterDAO.getName();
-            this.image = characterDAO.getImage();
-        }
-        this.questions = questions;
-    }
 }

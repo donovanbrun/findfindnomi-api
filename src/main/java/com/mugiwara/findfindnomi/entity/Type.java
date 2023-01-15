@@ -1,4 +1,4 @@
-package com.mugiwara.findfindnomi.dao;
+package com.mugiwara.findfindnomi.entity;
 
 public enum Type {
     PARAMECIA,

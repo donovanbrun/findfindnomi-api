@@ -1,4 +1,4 @@
-package com.mugiwara.findfindnomi.entity.ingestion;
+package com.mugiwara.findfindnomi.dto.ingestion;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

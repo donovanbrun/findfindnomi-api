@@ -1,4 +1,4 @@
-package com.mugiwara.findfindnomi.dao;
+package com.mugiwara.findfindnomi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DevilFruitDAO {
+public class DevilFruit {
 
     @Id
     private Long id;

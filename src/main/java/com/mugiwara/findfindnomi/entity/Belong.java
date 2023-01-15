@@ -1,4 +1,4 @@
-package com.mugiwara.findfindnomi.dao;
+package com.mugiwara.findfindnomi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,18 +7,21 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Character")
+@Table(name = "Belong")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CharacterDAO {
+public class Belong {
 
     @Id
     private Long id;
-    private String name;
-    private String image;
+    @OneToOne
+    private DevilFruit devilFruit;
+    @OneToOne
+    private Character character;
 }

@@ -1,6 +1,6 @@
-package com.mugiwara.findfindnomi.entity;
+package com.mugiwara.findfindnomi.dto;
 
-import com.mugiwara.findfindnomi.dao.CharacterDAO;
+import com.mugiwara.findfindnomi.entity.Character;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GuessResult {
+public class GuessResultDTO {
 
     private Long idDevilFruit;
     private String proposition;
     private boolean result;
-    private CharacterDAO character;
+    private Character character;
 }

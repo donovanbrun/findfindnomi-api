@@ -1,7 +1,7 @@
-package com.mugiwara.findfindnomi.entity;
+package com.mugiwara.findfindnomi.dto;
 
-import com.mugiwara.findfindnomi.dao.DevilFruitDAO;
-import com.mugiwara.findfindnomi.dao.Type;
+import com.mugiwara.findfindnomi.entity.DevilFruit;
+import com.mugiwara.findfindnomi.entity.Type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,15 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DevilFruitFull {
+public class DevilFruitFullDTO {
 
     private Long id;
     private String name;
     private Type type;
     private String image;
-    private List<Character> characters;
+    private List<CharacterDTO> characters;
 
-    public DevilFruitFull(DevilFruitDAO devilFruitDAO, List<Character> characters) {
+    public DevilFruitFullDTO(DevilFruit devilFruitDAO, List<CharacterDTO> characters) {
         if (devilFruitDAO != null) {
             this.id = devilFruitDAO.getId();
             this.name = devilFruitDAO.getName();
